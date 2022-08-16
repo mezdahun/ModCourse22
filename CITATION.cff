@@ -1,1 +1,8 @@
-
+cff-version: 1.2.0
+message: "You can cite this software with the attached cff file."
+authors:
+  - family-names: Mezey
+    given-names: David
+title: "Modelling Course 2022 - Minimal Corona Modelling"
+version: 2.0.4
+date-released: 2022-08-16
