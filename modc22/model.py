@@ -98,17 +98,14 @@ class NeuronModel(Model):
         self.r[self.t_i] = self.r[self.t_i - 1] + dr * self.dt
 
 
-
-
-
 class CoronaMeasureModel(Model):
-    def __init__(self, t_max, dt=1, Tau_c=20, Tau_r=25, alpha=1.5, A=0.1, r_inf=5):
+    def __init__(self, t_max, dt=1, Tau_c=20, Tau_r=25, alpha=1.5, A=0.1, r_inf=5, linear=True):
         """Model Parameters:
         """
         super().__init__(t_max, dt, model_name="Corona Measure Model")
         # Model Specific Parameters
         # generating Input injection function
-
+        self.linear = linear
 
         # corona cases
         self.c = np.zeros(self.t_len)
@@ -134,10 +131,11 @@ class CoronaMeasureModel(Model):
 
         # Calculating temporal evolution
         # Linear Model
-        dc = (1 / self.Tau_c) * (self.c[self.t_i - 1] - self.alpha * self.r[self.t_i - 1])
-
-        # Nonlinear Model
-        #dc = (1 / self.Tau_c) * self.coeff(self.r[self.t_i - 1]) * (self.c[self.t_i - 1])
+        if self.linear:
+            dc = (1 / self.Tau_c) * (self.c[self.t_i - 1] - self.alpha * self.r[self.t_i - 1])
+        else:
+            # Nonlinear Model
+            dc = (1 / self.Tau_c) * self.coeff(self.r[self.t_i - 1]) * (self.c[self.t_i - 1])
         dr = (1 / self.Tau_r) * (self.c[self.t_i - 1] - self.r[self.t_i - 1])
 
         # Evolving state variables in time

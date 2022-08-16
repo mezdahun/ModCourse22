@@ -17,8 +17,7 @@ import numpy as np
 # t = np.arange(0, t_max, dt)
 # for i, K in enumerate(Ks):
 #     # defining model with given parameters
-#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=0.5,  # linear model parameters
-#                              A=0.9, r_inf=20)  # non-linear model parameters
+#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=0.5)
 #     # evolving system
 #     mod.run()
 #
@@ -42,8 +41,8 @@ import numpy as np
 # plt.ylabel("Reported Cases ~ Measures")
 # plt.xlabel("t [days]")
 # plt.show()
-
-
+#
+#
 # # Generating figure 1.2
 # cs = []
 # rs = []
@@ -56,8 +55,7 @@ import numpy as np
 # t = np.arange(0, t_max, dt)
 # for i, K in enumerate(Ks):
 #     # defining model with given parameters
-#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=1.5,  # linear model parameters
-#                              A=0.9, r_inf=20)  # non-linear model parameters
+#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=1.5)
 #     # evolving system
 #     mod.run()
 #
@@ -81,8 +79,8 @@ import numpy as np
 # plt.ylabel("Reported Cases ~ Measures")
 # plt.xlabel("t [days]")
 # plt.show()
-
-
+#
+#
 # # Generating figure 1.3
 # cs = []
 # rs = []
@@ -95,8 +93,7 @@ import numpy as np
 # t = np.arange(0, t_max, dt)
 # for i, K in enumerate(Ks):
 #     # defining model with given parameters
-#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=1.5,  # linear model parameters
-#                              A=0.9, r_inf=20)  # non-linear model parameters
+#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=K, alpha=1.5)
 #     # evolving system
 #     mod.run()
 #
@@ -120,8 +117,8 @@ import numpy as np
 # plt.ylabel("Reported Cases ~ Measures")
 # plt.xlabel("t [days]")
 # plt.show()
-
-
+#
+#
 # # Generating figure 2.1
 # cs = []
 # rs = []
@@ -134,8 +131,7 @@ import numpy as np
 # t = np.arange(0, t_max, dt)
 # for i, alpha in enumerate(alphas):
 #     # defining model with given parameters
-#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=0.5, alpha=alpha,  # linear model parameters
-#                              A=0.9, r_inf=20)  # non-linear model parameters
+#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=0.5, alpha=alpha)
 #     # evolving system
 #     mod.run()
 #
@@ -159,22 +155,61 @@ import numpy as np
 # plt.ylabel("Reported Cases ~ Measures")
 # plt.xlabel("t [days]")
 # plt.show()
+#
+#
+# # Generating figure 2.2
+# cs = []
+# rs = []
+# fig, ax = plt.subplots(2, 1, figsize=(8, 8), sharex=True, sharey=True)
+# alphas = [ 1.05, 1.1, 1.25, 1.5, 1.75, 2.5]
+# colors = cm.jet(np.linspace(0, 1, len(alphas)))
+#
+# t_max = 25
+# dt = 0.01
+# t = np.arange(0, t_max, dt)
+# for i, alpha in enumerate(alphas):
+#     # defining model with given parameters
+#     mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=1.5, alpha=alpha)
+#     # evolving system
+#     mod.run()
+#
+#     # collecting data
+#     c, r = mod.get_data()
+#     cs.append(c)
+#     rs.append(r)
+#
+#     # showing data
+#     col = colors[i]
+#     plt.axes(ax[0])
+#     plt.plot(t, c * 1e5, label=f"$\\alpha$={alpha}", color=col)
+#     plt.axes(ax[1])
+#     plt.plot(t, r * 1e5, label=f"$\\alpha$={alpha}", color=col)
+#
+# plt.axes(ax[0])
+# plt.legend(loc="upper left")
+# plt.ylabel("Positive Cases")
+# plt.axes(ax[1])
+# plt.legend(loc="upper left")
+# plt.ylabel("Reported Cases ~ Measures")
+# plt.xlabel("t [days]")
+# plt.show()
 
 
-# Generating figure 2.2
+# Generating figure 3
 cs = []
 rs = []
-fig, ax = plt.subplots(2, 1, figsize=(8, 8), sharex=True, sharey=True)
-alphas = [ 1.05, 1.1, 1.25, 1.5, 1.75, 2.5]
-colors = cm.jet(np.linspace(0, 1, len(alphas)))
+fig, ax = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
+a_s = [0.1, 0.2, 1, 3]
+r_inf = 100
+Tau_r = 10
+colors = cm.jet(np.linspace(0, 1, len(a_s)))
 
-t_max = 25
+t_max = 100
 dt = 0.01
 t = np.arange(0, t_max, dt)
-for i, alpha in enumerate(alphas):
+for i, a in enumerate(a_s):
     # defining model with given parameters
-    mod = CoronaMeasureModel(t_max, dt, Tau_c=1, Tau_r=1.5, alpha=alpha,  # linear model parameters
-                             A=0.9, r_inf=20)  # non-linear model parameters
+    mod = CoronaMeasureModel(t_max, dt, Tau_r=10, A=a, r_inf=r_inf, linear=False)  # non-linear model parameters
     # evolving system
     mod.run()
 
@@ -186,9 +221,9 @@ for i, alpha in enumerate(alphas):
     # showing data
     col = colors[i]
     plt.axes(ax[0])
-    plt.plot(t, c * 1e5, label=f"$\\alpha$={alpha}", color=col)
+    plt.plot(t, c * 1e5, label=f"$a$={a}", color=col)
     plt.axes(ax[1])
-    plt.plot(t, r * 1e5, label=f"$\\alpha$={alpha}", color=col)
+    plt.plot(t, r * 1e5, label=f"$a$={a}", color=col)
 
 plt.axes(ax[0])
 plt.legend(loc="upper left")
